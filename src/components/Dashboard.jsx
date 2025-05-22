@@ -8,10 +8,14 @@ import ResourceSchedule from './dashboard/ResourceSchedule';
 import FarmPredictions from './dashboard/FarmPredictions';
 import ResourceUsage from './dashboard/ResourceUsage';
 import GrowthStageSelector from './dashboard/GrowthStageSelector';
+import AlgorithmPerformance from './dashboard/AlgorithmPerformance';
+import AlgorithmComparison from './dashboard/AlgorithmComparison';
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const { farmHealth } = useFarm();
+  const { farmHealth, optimizationAlgorithm } = useFarm();
+  const [isAlgorithmRunning, setIsAlgorithmRunning] = useState(false);
+  const [algorithmStartTime, setAlgorithmStartTime] = useState(null);
+  const [algorithmEndTime, setAlgorithmEndTime] = useState(null);
   
   const healthColor = farmHealth > 80 ? 'text-success-600 dark:text-success-400' : 
                       farmHealth > 60 ? 'text-secondary-500 dark:text-secondary-400' :
@@ -40,25 +44,45 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <FarmOverview />
-        
         <CropSelector />
-        
         <GrowthStageSelector />
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <EnvironmentalFactors />
-        
-        <OptimizationPanel />
+        <OptimizationPanel 
+          onOptimizationStart={() => {
+            setIsAlgorithmRunning(true);
+            setAlgorithmStartTime(Date.now());
+            setAlgorithmEndTime(null);
+          }}
+          onOptimizationEnd={() => {
+            setIsAlgorithmRunning(false);
+            setAlgorithmEndTime(Date.now());
+          }}
+        />
       </div>
       
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-6 mb-6">
         <ResourceSchedule />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <ResourceUsage />
-          <FarmPredictions />
-        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <ResourceUsage />
+        <FarmPredictions />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 mb-6">
+        <AlgorithmPerformance 
+          algorithm={optimizationAlgorithm}
+          isRunning={isAlgorithmRunning}
+          startTime={algorithmStartTime}
+          endTime={algorithmEndTime}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        <AlgorithmComparison />
       </div>
     </div>
   );
