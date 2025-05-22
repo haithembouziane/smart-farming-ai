@@ -2,7 +2,7 @@ import { useFarm } from '../../context/FarmContext';
 import { Search, Cpu, Leaf } from 'lucide-react';
 import { algorithmData } from '../../data/farmData';
 
-const OptimizationPanel = () => {
+const OptimizationPanel = ({ onOptimizationStart, onOptimizationEnd }) => {
   const { optimizationAlgorithm, setOptimizationAlgorithm, resources, setResources, environmentalFactors, additionalFactors, selectedCrop, soilType, growthStage, setRecommendedSchedule, setYieldForecast, setIsLoading } = useFarm();
 
   const handleResourceChange = (resource, value) => {
@@ -42,6 +42,7 @@ const OptimizationPanel = () => {
     
     try {
       setIsLoading(true);
+      onOptimizationStart();
       console.log("Calling optimization API with payload:", payload);
       
       const response = await fetch('/api/optimize', {
@@ -69,6 +70,7 @@ const OptimizationPanel = () => {
       // You could show an error message to the user here
     } finally {
       setIsLoading(false);
+      onOptimizationEnd();
     }
   };
 

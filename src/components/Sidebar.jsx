@@ -27,27 +27,33 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     };
   }, [isOpen, setIsOpen]);
 
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setIsOpen(false);
+    }
+  };
+
   const menuItems = [
-    { name: 'Dashboard', icon: Home, current: true },
-    { name: 'Analytics', icon: BarChart2, current: false },
-    { name: 'Schedule', icon: Calendar, current: false },
-    { name: 'Resources', icon: Droplets, current: false },
-    { name: 'Crop Management', icon: Sprout, current: false },
-    { name: 'Weather', icon: CloudRain, current: false },
-    { name: 'Alerts', icon: AlertTriangle, current: false },
-    { name: 'Settings', icon: Settings, current: false },
+    { id: 'dashboard', name: 'Dashboard', icon: Home, current: true },
+    { id: 'analytics', name: 'Analytics', icon: BarChart2, current: false },
+    { id: 'schedule', name: 'Schedule', icon: Calendar, current: false },
+    { id: 'resources', name: 'Resources', icon: Droplets, current: false },
+    { id: 'crop-management', name: 'Crop Management', icon: Sprout, current: false },
+    { id: 'weather', name: 'Weather', icon: CloudRain, current: false },
+    { id: 'alerts', name: 'Alerts', icon: AlertTriangle, current: false },
+    { id: 'settings', name: 'Settings', icon: Settings, current: false },
   ];
 
   return (
     <>
-      {/* Overlay for mobile only */}
       <div 
         className={`fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity z-20 md:hidden ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
       />
 
-      {/* Sidebar: fixed on mobile, static on md+ */}
       <div 
         ref={sidebarRef}
         className={`z-30 w-64 bg-white dark:bg-gray-800 shadow-lg transition-transform
@@ -73,10 +79,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
-                <a
-                  key={item.name}
-                  href="#"
-                  className={`${
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`w-full text-left ${
                     item.current
                       ? 'bg-primary-50 text-primary-700 dark:bg-gray-700 dark:text-primary-300'
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
@@ -91,7 +97,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     aria-hidden="true"
                   />
                   {item.name}
-                </a>
+                </button>
               );
             })}
           </nav>
