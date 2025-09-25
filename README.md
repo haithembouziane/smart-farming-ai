@@ -232,12 +232,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - UI components inspired by modern farming management systems
 - Algorithm implementations based on academic research in agricultural optimization
 
-## 📞 Contact
 
-**Your Name** - your.email@example.com
-
-Project Link: [https://github.com/yourusername/smart-farming-ai](https://github.com/yourusername/smart-farming-ai)
-
----
 
 ⭐ **Star this repository if you found it helpful!**
